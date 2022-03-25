@@ -23,7 +23,12 @@ namespace WebApiAutores
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("defaultConnection")));
 
-            services.AddSingleton<Iservicio, ServicioB>();
+            services.AddTransient<Iservicio, ServicioA>();
+
+
+            services.AddTransient<ServicioTransient>();
+            services.AddScoped<ServicioScoped>();
+            services.AddSingleton<ServicioSingleton>();
 
             services.AddSwaggerGen( c =>
             {

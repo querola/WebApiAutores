@@ -10,15 +10,38 @@ namespace WebApiAutores.Controllers
     [Route("api/autores")]
     public class AutoresController : ControllerBase
     {
-        
+
         private readonly ApplicationDbContext context;
         private readonly Iservicio servicio;
+        private readonly ServicioTransient servicioTransient;
+        private readonly ServicioSingleton servicioSingleton;
+        private readonly ServicioScoped servicioScoped;
 
-        public AutoresController(ApplicationDbContext context , Iservicio servicio)
+        public AutoresController(ApplicationDbContext context, Iservicio servicio , ServicioTransient servicioTransient, 
+            ServicioSingleton servicioSingleton , ServicioScoped servicioScoped)
         {
             //context.Database.EnsureCreated();
             this.context = context;
             this.servicio = servicio;
+            this.servicioTransient = servicioTransient;
+            this.servicioSingleton = servicioSingleton;
+            this.servicioScoped = servicioScoped;
+        }
+
+
+        [HttpGet("GUID")]   
+        public  ActionResult ObtenerGuids()
+        {
+            return Ok(new
+            {
+                AutoresController_Transient = servicioTransient.guid,
+                ServicioA_Transient = servicio.ObtenerTransient(),
+                AutoresController_Scoped = servicioScoped.guid,
+                ServicioA_Scoped = servicio.ObtenerScoped(),
+                AutoresController_Singleton = servicioSingleton.guid,             
+                ServicioA_Singleton = servicio.ObtenerSingleton()
+            }) ;
+            
         }
 
         [HttpGet]// api/autores
